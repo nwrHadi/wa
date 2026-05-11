@@ -1,0 +1,118 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: wa-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: wa_platform
+      MYSQL_USER: waapp
+      MYSQL_PASSWORD: waapp123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ../backend/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: wa-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: api
+    container_name: wa-backend
+    environment:
+      API_PORT: 8080
+      JWT_SECRET: change-me
+      WEBHOOK_SIGNING_SECRET: change-me
+      INTERNAL_SHARED_TOKEN: change-me
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin123
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: waapp
+      DB_PASSWORD: waapp123
+      DB_NAME: wa_platform
+      REDIS_ADDR: redis:6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
+      WORKER_CONCURRENCY: 10
+    ports:
+      - "8080:8080"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: worker
+    container_name: wa-worker
+    environment:
+      JWT_SECRET: change-me
+      WEBHOOK_SIGNING_SECRET: change-me
+      INTERNAL_SHARED_TOKEN: change-me
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin123
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: waapp
+      DB_PASSWORD: waapp123
+      DB_NAME: wa_platform
+      REDIS_ADDR: redis:6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
+      WORKER_CONCURRENCY: 10
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  baileys-gateway:
+    build:
+      context: ../baileys-gateway
+      dockerfile: Dockerfile
+    container_name: wa-baileys-gateway
+    environment:
+      PORT: 8090
+      BACKEND_EVENT_URL: http://backend:8080/internal/events/baileys
+      BACKEND_SHARED_TOKEN: change-me
+    ports:
+      - "8090:8090"
+    depends_on:
+      - backend
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: wa-frontend
+    environment:
+      NUXT_PUBLIC_API_BASE: http://localhost:8080
+      NUXT_PUBLIC_WS_BASE: ws://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  mariadb_data:

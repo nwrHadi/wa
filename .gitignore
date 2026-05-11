@@ -1,0 +1,28 @@
+# Node
+node_modules/
+.npm/
+.pnpm-store/
+
+# Nuxt
+.frontend/
+frontend/.nuxt/
+frontend/.output/
+frontend/.nitro/
+
+# Go
+bin/
+*.exe
+*.test
+*.out
+
+# Env
+.env
+.env.local
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.DS_Store
