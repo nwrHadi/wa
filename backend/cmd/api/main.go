@@ -62,7 +62,7 @@ func main() {
 	go scheduler.Run(ctx)
 
 	h := server.Handlers{
-		Health:         handlers.HealthHandler{DB: mariaDB, Redis: redisClient},
+		Health:         handlers.HealthHandler{DB: mariaDB, Redis: redisClient, RedisOptional: cfg.RedisOptional},
 		Auth:           handlers.AuthHandler{Cfg: cfg, Store: repo},
 		Dashboard:      handlers.DashboardHandler{Store: repo},
 		Devices:        handlers.DevicesHandler{Store: repo, Queue: queue, Hub: hub},

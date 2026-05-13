@@ -7,14 +7,14 @@
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#0058bc] shadow-lg mb-md">
           <span class="material-symbols-outlined text-white text-[36px]" style="font-variation-settings:'FILL' 1">hub</span>
         </div>
-        <h1 class="text-[#1a1c1c] font-bold tracking-tight" style="font-size:48px;line-height:56px;letter-spacing:-0.02em">WA Control</h1>
-        <p class="text-[#5f5e60] text-[15px] mt-xs">Enterprise Management</p>
+        <h1 class="text-[#1a1c1c] font-bold tracking-tight text-[36px] leading-[44px] sm:text-[48px] sm:leading-[56px]" style="letter-spacing:-0.02em">WA Control</h1>
+        <p class="text-[#5f5e60] text-[14px] sm:text-[15px] mt-xs">Enterprise Management</p>
       </div>
 
       <!-- Login Card -->
       <div class="glass-card w-full rounded-[28px] p-xl">
         <div class="mb-lg">
-          <h2 class="text-[#1a1c1c] font-semibold" style="font-size:24px;line-height:32px">Welcome back</h2>
+          <h2 class="text-[#1a1c1c] font-semibold text-[22px] leading-[30px] sm:text-[24px] sm:leading-[32px]">Welcome back</h2>
           <p class="text-[#414755] text-[13px] mt-xs">Sign in to manage your automated flows.</p>
         </div>
 
@@ -84,8 +84,8 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
 
-const username = ref("ara");
-const password = ref("ara321");
+const username = ref("");
+const password = ref("");
 const loading = ref(false);
 const error = ref("");
 
@@ -96,6 +96,7 @@ const onSubmit = async () => {
   error.value = "";
 
   try {
+    console.log("Sending login request...", { username: username.value });
     const result = await request<{ token: string }>("/api/v1/auth/login", {
       method: "POST",
       body: JSON.stringify({
@@ -104,10 +105,22 @@ const onSubmit = async () => {
       }),
     });
 
+    if (!result || !result.token) {
+      console.error("Invalid response structure:", result);
+      error.value = "Login response invalid. Please try again.";
+      return;
+    }
+
+    console.log("Login successful, token received");
     localStorage.setItem("wa_token", result.token);
+    console.log("Token stored, navigating to dashboard...");
+    
+    // Use navigateTo and wait for it to complete
     await navigateTo("/dashboard");
-  } catch {
-    error.value = "Login failed. Check your credentials.";
+    console.log("Navigation completed");
+  } catch (err: any) {
+    console.error("Login error:", err);
+    error.value = err?.data?.message || "Login failed. Check your credentials.";
   } finally {
     loading.value = false;
   }

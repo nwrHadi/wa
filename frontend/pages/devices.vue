@@ -1,24 +1,24 @@
 ﻿<template>
   <div>
     <!-- Page Header -->
-    <div class="flex justify-between items-end mb-xl">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-xl">
       <div>
         <div class="flex items-center gap-sm text-[#5f5e60] mb-sm">
           <span class="text-[13px] font-medium">Management</span>
           <span class="material-symbols-outlined text-[16px]">chevron_right</span>
           <span class="text-[13px] font-semibold text-[#1a1c1c]">Devices</span>
         </div>
-        <h2 class="text-[#1a1c1c] font-semibold" style="font-size:32px;line-height:40px;letter-spacing:-0.01em">Connected Devices</h2>
-        <p class="text-[#5f5e60] text-[15px] mt-xs">Manage your active WhatsApp instances and monitor their health.</p>
+        <h2 class="text-[#1a1c1c] font-semibold text-[26px] leading-[34px] sm:text-[32px] sm:leading-[40px]" style="letter-spacing:-0.01em">Connected Devices</h2>
+        <p class="text-[#5f5e60] text-[14px] sm:text-[15px] mt-xs">Manage your active WhatsApp instances and monitor their health.</p>
       </div>
-      <div class="flex gap-md">
-        <div class="flex items-center gap-sm px-md py-sm bg-white rounded-lg border border-[rgba(193,198,215,0.2)] shadow-sm">
-          <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-          <span class="text-[13px] font-medium text-[#414755]">{{ connectedCount }} Active</span>
+      <div class="flex gap-2 sm:gap-md">
+        <div class="flex items-center gap-sm px-3 sm:px-md py-sm bg-white rounded-lg border border-[rgba(193,198,215,0.2)] shadow-sm">
+          <span class="w-2 h-2 bg-green-500 rounded-full shrink-0"></span>
+          <span class="text-[12px] sm:text-[13px] font-medium text-[#414755] whitespace-nowrap">{{ connectedCount }} Active</span>
         </div>
-        <div class="flex items-center gap-sm px-md py-sm bg-white rounded-lg border border-[rgba(193,198,215,0.2)] shadow-sm">
-          <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-          <span class="text-[13px] font-medium text-[#414755]">{{ offlineCount }} Offline</span>
+        <div class="flex items-center gap-sm px-3 sm:px-md py-sm bg-white rounded-lg border border-[rgba(193,198,215,0.2)] shadow-sm">
+          <span class="w-2 h-2 bg-red-500 rounded-full shrink-0"></span>
+          <span class="text-[12px] sm:text-[13px] font-medium text-[#414755] whitespace-nowrap">{{ offlineCount }} Offline</span>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
               <span class="material-symbols-outlined text-[28px]">smartphone</span>
             </div>
             <div>
-              <h3 class="text-[#1a1c1c] font-semibold" style="font-size:20px;line-height:28px">{{ device.label }}</h3>
+              <h3 class="text-[#1a1c1c] font-semibold text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">{{ device.label }}</h3>
               <p class="text-[#5f5e60] text-[13px] font-medium">{{ device.deviceKey }}</p>
               <p v-if="device.phoneNumber" class="text-[#0058bc] text-[13px] font-medium">{{ device.phoneNumber }}</p>
             </div>
@@ -80,46 +80,46 @@
         </div>
 
         <!-- Actions -->
-        <div class="flex gap-sm border-t border-[rgba(193,198,215,0.1)] pt-md">
+        <div class="flex flex-wrap gap-1.5 sm:gap-sm border-t border-[rgba(193,198,215,0.1)] pt-md">
           <button
             v-if="device.status === 'connected'"
             @click="showMessageForm(device)"
-            class="flex-1 py-2 text-[13px] font-medium bg-[#eeeeee] hover:bg-[#e2e2e2] text-[#414755] rounded-lg transition-colors"
+            class="flex-1 sm:flex-initial py-2 text-[12px] sm:text-[13px] font-medium bg-[#eeeeee] hover:bg-[#e2e2e2] text-[#414755] rounded-lg transition-colors px-3"
           >
             Send Message
           </button>
           <button
             v-if="device.status === 'disconnected'"
             @click="connectDevice(device.deviceKey)"
-            class="flex-1 py-2 text-[13px] font-semibold bg-[#0058bc] text-white rounded-lg shadow-sm hover:opacity-90 transition-opacity"
+            class="flex-1 sm:flex-initial py-2 text-[12px] sm:text-[13px] font-semibold bg-[#0058bc] text-white rounded-lg shadow-sm hover:opacity-90 transition-opacity px-3"
           >
             Connect
           </button>
           <button
             v-if="device.status === 'connecting' && qrModals[device.id]"
             @click="qrModals[device.id] = false"
-            class="flex-1 py-2 text-[13px] font-medium bg-[#eeeeee] hover:bg-[#e2e2e2] text-[#414755] rounded-lg transition-colors"
+            class="flex-1 sm:flex-initial py-2 text-[12px] sm:text-[13px] font-medium bg-[#eeeeee] hover:bg-[#e2e2e2] text-[#414755] rounded-lg transition-colors px-3"
           >
             Hide QR
           </button>
           <button
             v-if="device.status === 'connecting' && !qrModals[device.id] && device.qrDataUrl"
             @click="qrModals[device.id] = true"
-            class="flex-1 py-2 text-[13px] font-medium bg-[#eeeeee] hover:bg-[#e2e2e2] text-[#414755] rounded-lg transition-colors"
+            class="flex-1 sm:flex-initial py-2 text-[12px] sm:text-[13px] font-medium bg-[#eeeeee] hover:bg-[#e2e2e2] text-[#414755] rounded-lg transition-colors px-3"
           >
             Show QR
           </button>
           <button
             v-if="device.status !== 'disconnected'"
             @click="disconnectDevice(device.deviceKey)"
-            class="flex-1 py-2 text-[13px] font-medium bg-[rgba(186,26,26,0.05)] hover:bg-[rgba(186,26,26,0.1)] text-[#ba1a1a] rounded-lg transition-colors"
+            class="flex-1 sm:flex-initial py-2 text-[12px] sm:text-[13px] font-medium bg-[rgba(186,26,26,0.05)] hover:bg-[rgba(186,26,26,0.1)] text-[#ba1a1a] rounded-lg transition-colors px-3"
           >
             Disconnect
           </button>
           <button
             @click="openDeleteDialog(device)"
             :disabled="deletingDeviceKey === device.deviceKey"
-            class="flex-1 py-2 text-[13px] font-medium bg-[rgba(186,26,26,0.08)] hover:bg-[rgba(186,26,26,0.16)] text-[#ba1a1a] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="flex-1 sm:flex-initial py-2 text-[12px] sm:text-[13px] font-medium bg-[rgba(186,26,26,0.08)] hover:bg-[rgba(186,26,26,0.16)] text-[#ba1a1a] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed px-3"
           >
             {{ deletingDeviceKey === device.deviceKey ? "Deleting..." : "Delete" }}
           </button>
@@ -134,7 +134,7 @@
         <div class="w-14 h-14 rounded-full bg-[#eeeeee] flex items-center justify-center text-[#5f5e60] mb-md group-hover:scale-110 group-hover:bg-[#0058bc] group-hover:text-white transition-all duration-300">
           <span class="material-symbols-outlined text-[32px]">add_to_home_screen</span>
         </div>
-        <span class="text-[20px] font-semibold text-[#414755]">Add New Instance</span>
+        <span class="text-[18px] sm:text-[20px] font-semibold text-[#414755]">Add New Instance</span>
         <p class="text-[13px] text-[#5f5e60] text-center max-w-[200px] mt-xs">Connect a new WhatsApp account to WA Control.</p>
       </div>
     </div>
@@ -157,7 +157,7 @@
         <div class="p-xl">
           <div class="flex justify-between items-center mb-lg">
             <div>
-              <h2 class="text-[#1a1c1c] font-semibold" style="font-size:24px;line-height:32px">Add New Device</h2>
+              <h2 class="text-[#1a1c1c] font-semibold" style="font-size:22px;line-height:30px">Add New Device</h2>
               <p class="text-[#5f5e60] text-[13px] mt-xs">Connect a new WhatsApp instance.</p>
             </div>
             <button @click="showAddDeviceModal = false" class="p-2 hover:bg-[#eeeeee] rounded-full transition-colors text-[#5f5e60]">
@@ -208,7 +208,7 @@
         <div class="p-xl">
           <div class="flex justify-between items-center mb-lg">
             <div>
-              <h2 class="text-[#1a1c1c] font-semibold" style="font-size:24px;line-height:32px">Send Message</h2>
+              <h2 class="text-[#1a1c1c] font-semibold" style="font-size:22px;line-height:30px">Send Message</h2>
               <p class="text-[#5f5e60] text-[13px] mt-xs">via <strong>{{ selectedDevice.label }}</strong></p>
             </div>
             <button @click="showMessageModal = false" class="p-2 hover:bg-[#eeeeee] rounded-full transition-colors text-[#5f5e60]">
@@ -267,7 +267,7 @@
           <div class="w-12 h-12 rounded-2xl bg-[rgba(186,26,26,0.1)] text-[#ba1a1a] flex items-center justify-center mb-md">
             <span class="material-symbols-outlined">delete</span>
           </div>
-          <h2 class="text-[#1a1c1c] font-semibold" style="font-size:24px;line-height:32px">Delete Device?</h2>
+          <h2 class="text-[#1a1c1c] font-semibold" style="font-size:22px;line-height:30px">Delete Device?</h2>
           <p class="text-[#5f5e60] text-[13px] mt-sm">
             Device <strong>{{ deviceToDelete.label }}</strong> ({{ deviceToDelete.deviceKey }}) akan dihapus permanen dari dashboard.
           </p>
@@ -303,6 +303,8 @@ import { ref, onMounted, computed } from "vue";
 definePageMeta({ layout: "default" });
 
 const { request } = useApi();
+const config = useRuntimeConfig();
+const gatewayBase = `${config.public.gatewayBase || "/gateway"}`.replace(/\/$/, "");
 
 interface Device {
   id: string;
@@ -330,6 +332,16 @@ const qrModals = ref<Record<string, boolean>>({});
 
 const connectedCount = computed(() => devices.value.filter(d => d.status === "connected").length);
 const offlineCount = computed(() => devices.value.filter(d => d.status === "disconnected").length);
+
+const gatewayRequest = async <T>(path: string, init?: RequestInit): Promise<T> => {
+  const response = await $fetch<T>(`${gatewayBase}${path}`, {
+    ...init,
+    retry: 0,
+    timeout: 10000,
+  });
+
+  return response;
+};
 
 const loadDevices = async () => {
   try {
@@ -390,19 +402,15 @@ const addDeviceAndClose = async () => {
 
 const connectDevice = async (deviceKey: string) => {
   try {
-    const response = await fetch(`http://localhost:8090/devices/${deviceKey}/connect`, {
+    const encodedDeviceKey = encodeURIComponent(deviceKey);
+    await gatewayRequest(`/devices/${encodedDeviceKey}/connect`, {
       method: "POST",
     });
-    
-    if (!response.ok) {
-      throw new Error("Failed to initiate connection");
-    }
 
     let attempts = 0;
     const interval = setInterval(async () => {
       try {
-        const statusRes = await fetch(`http://localhost:8090/devices/${deviceKey}/status`);
-        const status = await statusRes.json();
+        const status = await gatewayRequest<any>(`/devices/${encodedDeviceKey}/status`);
 
         const device = devices.value.find((d) => d.deviceKey === deviceKey);
         if (device) {
@@ -440,13 +448,10 @@ const connectDevice = async (deviceKey: string) => {
 
 const disconnectDevice = async (deviceKey: string) => {
   try {
-    const response = await fetch(`http://localhost:8090/devices/${deviceKey}/disconnect`, {
+    const encodedDeviceKey = encodeURIComponent(deviceKey);
+    await gatewayRequest(`/devices/${encodedDeviceKey}/disconnect`, {
       method: "POST",
     });
-    
-    if (!response.ok) {
-      throw new Error("Failed to disconnect device");
-    }
 
     await loadDevices();
   } catch (err) {

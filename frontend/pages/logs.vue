@@ -1,23 +1,23 @@
 <template>
   <div>
     <!-- Page Header -->
-    <div class="flex justify-between items-end mb-xl">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-xl">
       <div>
         <div class="flex items-center gap-sm text-[#5f5e60] mb-sm">
           <span class="text-[13px] font-medium">Audit Trail</span>
           <span class="material-symbols-outlined text-[16px]">chevron_right</span>
           <span class="text-[13px] font-semibold text-[#1a1c1c]">Message Logs</span>
         </div>
-        <h2 class="text-[#1a1c1c] font-semibold" style="font-size:32px;line-height:40px;letter-spacing:-0.01em">Message Delivery Logs</h2>
-        <p class="text-[#5f5e60] text-[15px] mt-xs">Track every outgoing message and its delivery status.</p>
+        <h2 class="text-[#1a1c1c] font-semibold text-[26px] leading-[34px] sm:text-[32px] sm:leading-[40px]" style="letter-spacing:-0.01em">Message Delivery Logs</h2>
+        <p class="text-[#5f5e60] text-[14px] sm:text-[15px] mt-xs">Track every outgoing message and its delivery status.</p>
       </div>
-      <div class="flex gap-md">
-        <button class="flex items-center gap-sm px-md py-sm bg-white border border-[rgba(193,198,215,0.2)] rounded-xl text-[13px] font-medium text-[#414755] hover:bg-[#f3f3f4] transition-colors shadow-sm">
-          <span class="material-symbols-outlined text-[18px]">download</span>
+      <div class="flex gap-2 sm:gap-md self-start sm:self-auto">
+        <button class="flex items-center gap-sm px-3 sm:px-md py-sm bg-white border border-[rgba(193,198,215,0.2)] rounded-xl text-[12px] sm:text-[13px] font-medium text-[#414755] hover:bg-[#f3f3f4] transition-colors shadow-sm whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] sm:text-[18px]">download</span>
           Export Logs
         </button>
-        <button @click="load" class="flex items-center gap-sm px-md py-sm bg-[#0058bc] text-white rounded-xl text-[13px] font-semibold hover:opacity-90 transition-opacity shadow-md">
-          <span class="material-symbols-outlined text-[18px]">refresh</span>
+        <button @click="load" class="flex items-center gap-sm px-3 sm:px-md py-sm bg-[#0058bc] text-white rounded-xl text-[12px] sm:text-[13px] font-semibold hover:opacity-90 transition-opacity shadow-md whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] sm:text-[18px]">refresh</span>
           Refresh
         </button>
       </div>

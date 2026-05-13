@@ -2,14 +2,14 @@
   <div>
     <!-- Page Header -->
     <header class="mb-xl">
-      <div class="flex justify-between items-center">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 class="text-[#1a1c1c] font-semibold" style="font-size:32px;line-height:40px;letter-spacing:-0.01em">Overview</h2>
-          <p class="text-[#5f5e60] text-[15px] mt-xs">Real-time status of your WhatsApp bot infrastructure.</p>
+          <h2 class="text-[#1a1c1c] font-semibold text-[26px] leading-[34px] sm:text-[32px] sm:leading-[40px]" style="letter-spacing:-0.01em">Overview</h2>
+          <p class="text-[#5f5e60] text-[14px] sm:text-[15px] mt-xs">Real-time status of your WhatsApp bot infrastructure.</p>
         </div>
         <button
           @click="refresh"
-          class="flex items-center gap-sm px-lg py-sm bg-white border border-[rgba(193,198,215,0.3)] rounded-xl text-[13px] font-medium text-[#1a1c1c] hover:bg-[#f3f3f4] transition-colors shadow-sm"
+          class="flex items-center gap-sm px-lg py-sm bg-white border border-[rgba(193,198,215,0.3)] rounded-xl text-[13px] font-medium text-[#1a1c1c] hover:bg-[#f3f3f4] transition-colors shadow-sm self-start sm:self-auto"
         >
           <span class="material-symbols-outlined text-[18px]">refresh</span>
           Refresh
@@ -35,7 +35,7 @@
         </div>
         <div>
           <p class="text-[#5f5e60] text-[13px] font-medium">Connected Devices</p>
-          <h3 class="text-[#1a1c1c] font-semibold mt-xs" style="font-size:24px;line-height:32px">{{ summary.connectedDevices }}</h3>
+          <h3 class="text-[#1a1c1c] font-semibold mt-xs text-[20px] leading-7 sm:text-[24px] sm:leading-[32px]">{{ summary.connectedDevices }}</h3>
         </div>
       </div>
 
@@ -51,7 +51,7 @@
         </div>
         <div>
           <p class="text-[#5f5e60] text-[13px] font-medium">Messages Sent</p>
-          <h3 class="text-[#1a1c1c] font-semibold mt-xs" style="font-size:24px;line-height:32px">{{ summary.sent }}</h3>
+          <h3 class="text-[#1a1c1c] font-semibold mt-xs text-[20px] leading-7 sm:text-[24px] sm:leading-[32px]">{{ summary.sent }}</h3>
         </div>
       </div>
 
@@ -67,7 +67,7 @@
         </div>
         <div>
           <p class="text-[#5f5e60] text-[13px] font-medium">Failed</p>
-          <h3 class="text-[#1a1c1c] font-semibold mt-xs" style="font-size:24px;line-height:32px">{{ summary.failed }}</h3>
+          <h3 class="text-[#1a1c1c] font-semibold mt-xs text-[20px] leading-7 sm:text-[24px] sm:leading-[32px]">{{ summary.failed }}</h3>
         </div>
       </div>
 
@@ -83,7 +83,7 @@
         </div>
         <div>
           <p class="text-[#5f5e60] text-[13px] font-medium">Processing</p>
-          <h3 class="text-[#1a1c1c] font-semibold mt-xs" style="font-size:24px;line-height:32px">{{ summary.processing }}</h3>
+          <h3 class="text-[#1a1c1c] font-semibold mt-xs text-[20px] leading-7 sm:text-[24px] sm:leading-[32px]">{{ summary.processing }}</h3>
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@
       <!-- Activity Chart -->
       <div class="lg:col-span-2 bg-white p-lg rounded-[20px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)]">
         <div class="flex justify-between items-center mb-lg">
-          <h4 class="text-[#1a1c1c] font-semibold" style="font-size:20px;line-height:28px">Message Activity</h4>
+          <h4 class="text-[#1a1c1c] font-semibold text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">Message Activity</h4>
           <div class="flex gap-sm">
             <span class="px-sm py-unit text-[11px] font-bold uppercase tracking-widest bg-[#e2e2e2] text-[#1a1c1c] rounded-lg">Live</span>
           </div>
@@ -121,7 +121,7 @@
 
       <!-- Status / Webhook Events -->
       <div class="bg-white p-lg rounded-[20px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)]">
-        <h4 class="text-[#1a1c1c] font-semibold mb-lg" style="font-size:20px;line-height:28px">Webhook Event Scope</h4>
+        <h4 class="text-[#1a1c1c] font-semibold mb-lg text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">Webhook Event Scope</h4>
         <div class="space-y-md">
           <div v-for="event in webhookEvents" :key="event" class="flex items-center gap-md">
             <div class="w-8 h-8 bg-[rgba(0,88,188,0.1)] rounded-lg flex items-center justify-center">
@@ -147,7 +147,7 @@
     <!-- Recent Activity Table -->
     <div class="bg-white rounded-[20px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] overflow-hidden">
       <div class="p-lg border-b border-[rgba(193,198,215,0.1)] flex justify-between items-center">
-        <h4 class="text-[#1a1c1c] font-semibold" style="font-size:20px;line-height:28px">System Status</h4>
+        <h4 class="text-[#1a1c1c] font-semibold text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">System Status</h4>
         <NuxtLink to="/logs" class="text-[#0058bc] text-[13px] font-medium hover:underline">View All Logs</NuxtLink>
       </div>
       <div class="p-lg">

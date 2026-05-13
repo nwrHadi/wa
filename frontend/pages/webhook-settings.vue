@@ -1,20 +1,20 @@
 <template>
   <div>
     <!-- Page Header -->
-    <div class="flex justify-between items-end mb-xl">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-xl">
       <div>
         <div class="flex items-center gap-sm text-[#5f5e60] mb-sm">
           <span class="text-[13px] font-medium">Settings</span>
           <span class="material-symbols-outlined text-[16px]">chevron_right</span>
           <span class="text-[13px] font-semibold text-[#1a1c1c]">Webhook</span>
         </div>
-        <h2 class="text-[#1a1c1c] font-semibold" style="font-size:32px;line-height:40px;letter-spacing:-0.01em">Webhook Settings</h2>
-        <p class="text-[#5f5e60] text-[15px] mt-xs">Configure outbound webhooks for real-time event notifications.</p>
+        <h2 class="text-[#1a1c1c] font-semibold text-[26px] leading-[34px] sm:text-[32px] sm:leading-[40px]" style="letter-spacing:-0.01em">Webhook Settings</h2>
+        <p class="text-[#5f5e60] text-[14px] sm:text-[15px] mt-xs">Configure outbound webhooks for real-time event notifications.</p>
       </div>
-      <div class="flex gap-md">
+      <div class="flex gap-md self-start sm:self-auto">
         <span
           v-if="savedWebhook"
-          class="flex items-center gap-sm px-md py-sm bg-green-100 text-green-700 rounded-xl text-[13px] font-semibold"
+          class="flex items-center gap-sm px-md py-sm bg-green-100 text-green-700 rounded-xl text-[13px] font-semibold whitespace-nowrap"
         >
           <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">check_circle</span>
           Webhook Active
@@ -32,7 +32,7 @@
               <span class="material-symbols-outlined">webhook</span>
             </div>
             <div>
-              <h3 class="text-[#1a1c1c] font-semibold" style="font-size:20px;line-height:28px">Endpoint Configuration</h3>
+              <h3 class="text-[#1a1c1c] font-semibold text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">Endpoint Configuration</h3>
               <p class="text-[#5f5e60] text-[13px]">Define where WA Control should send event payloads.</p>
             </div>
           </div>
@@ -90,7 +90,7 @@
               <span class="material-symbols-outlined">notifications</span>
             </div>
             <div>
-              <h3 class="text-[#1a1c1c] font-semibold" style="font-size:20px;line-height:28px">Events to Notify</h3>
+              <h3 class="text-[#1a1c1c] font-semibold text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">Events to Notify</h3>
               <p class="text-[#5f5e60] text-[13px]">Select which events trigger a webhook call.</p>
             </div>
           </div>
@@ -124,7 +124,7 @@
       <div class="flex flex-col gap-gutter">
         <!-- Actions Card -->
         <div class="bg-white p-lg rounded-[20px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)]">
-          <h3 class="text-[#1a1c1c] font-semibold mb-md" style="font-size:20px;line-height:28px">Actions</h3>
+          <h3 class="text-[#1a1c1c] font-semibold mb-md text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">Actions</h3>
           <div class="flex flex-col gap-md">
             <button
               @click="saveWebhook"
@@ -155,7 +155,7 @@
 
         <!-- Status Card -->
         <div class="bg-white p-lg rounded-[20px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)]">
-          <h3 class="text-[#1a1c1c] font-semibold mb-md" style="font-size:20px;line-height:28px">Status</h3>
+          <h3 class="text-[#1a1c1c] font-semibold mb-md text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">Status</h3>
           <div v-if="savedWebhook" class="flex flex-col gap-md">
             <div class="flex justify-between items-center">
               <span class="text-[13px] text-[#5f5e60]">State</span>
@@ -180,7 +180,7 @@
         <div class="bg-[rgba(0,88,188,0.04)] border border-[rgba(0,88,188,0.1)] p-lg rounded-[20px]">
           <div class="flex items-center gap-sm mb-md">
             <span class="material-symbols-outlined text-[#0058bc] text-[20px]">help</span>
-            <h3 class="text-[#1a1c1c] font-semibold">About Webhooks</h3>
+            <h3 class="text-[#1a1c1c] font-semibold text-[16px] sm:text-[18px]">About Webhooks</h3>
           </div>
           <p class="text-[13px] text-[#5f5e60] leading-relaxed">WA Control sends an HTTP POST to your URL on each selected event. Include a secret to verify payload authenticity via HMAC-SHA256 signature in the <code class="bg-[#e2e2e2] px-1 rounded text-[12px] font-mono">X-WA-Control-Signature</code> header.</p>
         </div>
@@ -190,7 +190,7 @@
     <!-- Recent Deliveries Table -->
     <div class="mt-xl bg-white rounded-[20px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] overflow-hidden">
       <div class="p-lg border-b border-[rgba(193,198,215,0.1)]">
-        <h3 class="text-[#1a1c1c] font-semibold" style="font-size:20px;line-height:28px">Saved Webhooks</h3>
+        <h3 class="text-[#1a1c1c] font-semibold text-[18px] leading-6 sm:text-[20px] sm:leading-[28px]">Saved Webhooks</h3>
         <p class="text-[#5f5e60] text-[13px] mt-xs">All registered webhook configurations.</p>
       </div>
       <div class="overflow-x-auto">

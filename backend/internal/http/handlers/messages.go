@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -49,6 +50,57 @@ type gatewayDeviceStatusResponse struct {
 	IsConnected bool   `json:"isConnected"`
 	QRCode      string `json:"qrCode"`
 	PhoneNumber string `json:"phoneNumber"`
+}
+
+// DeviceConnect triggers gateway connection flow for a device.
+func (h MessagesHandler) DeviceConnect(c echo.Context) error {
+	deviceKey := strings.TrimSpace(c.Param("deviceKey"))
+	if deviceKey == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "deviceKey is required"})
+	}
+
+	statusCode, body, err := h.callGateway(c.Request().Context(), http.MethodPost, fmt.Sprintf("/devices/%s/connect", url.PathEscape(deviceKey)), nil)
+	if err != nil {
+		return c.JSON(http.StatusBadGateway, map[string]string{"error": err.Error()})
+	}
+
+	if len(body) == 0 {
+		return c.JSON(statusCode, map[string]string{"status": "connecting"})
+	}
+	return c.Blob(statusCode, "application/json", body)
+}
+
+// DeviceDisconnect disconnects a device via gateway.
+func (h MessagesHandler) DeviceDisconnect(c echo.Context) error {
+	deviceKey := strings.TrimSpace(c.Param("deviceKey"))
+	if deviceKey == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "deviceKey is required"})
+	}
+
+	statusCode, body, err := h.callGateway(c.Request().Context(), http.MethodPost, fmt.Sprintf("/devices/%s/disconnect", url.PathEscape(deviceKey)), nil)
+	if err != nil {
+		return c.JSON(http.StatusBadGateway, map[string]string{"error": err.Error()})
+	}
+
+	if len(body) == 0 {
+		return c.JSON(statusCode, map[string]string{"status": "disconnected"})
+	}
+	return c.Blob(statusCode, "application/json", body)
+}
+
+// DeviceStatus returns live gateway status for a device.
+func (h MessagesHandler) DeviceStatus(c echo.Context) error {
+	deviceKey := strings.TrimSpace(c.Param("deviceKey"))
+	if deviceKey == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "deviceKey is required"})
+	}
+
+	status, err := h.getGatewayDeviceStatus(c.Request().Context(), deviceKey)
+	if err != nil {
+		return c.JSON(http.StatusBadGateway, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, status)
 }
 
 // Send message from a device to WhatsApp recipient
@@ -279,6 +331,35 @@ func (h MessagesHandler) sendViaGateway(ctx context.Context, deviceKey, toNumber
 	}
 
 	return gatewayResp.MessageID, nil
+}
+
+func (h MessagesHandler) callGateway(ctx context.Context, method, path string, payload []byte) (int, []byte, error) {
+	gatewayURL := strings.TrimSpace(h.GatewayURL)
+	if gatewayURL == "" {
+		gatewayURL = "http://localhost:8090"
+	}
+
+	var bodyReader io.Reader
+	if len(payload) > 0 {
+		bodyReader = bytes.NewReader(payload)
+	}
+
+	request, err := http.NewRequestWithContext(ctx, method, fmt.Sprintf("%s%s", strings.TrimRight(gatewayURL, "/"), path), bodyReader)
+	if err != nil {
+		return 0, nil, err
+	}
+	if len(payload) > 0 {
+		request.Header.Set("Content-Type", "application/json")
+	}
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return 0, nil, err
+	}
+	defer response.Body.Close()
+
+	responseBody, _ := io.ReadAll(response.Body)
+	return response.StatusCode, responseBody, nil
 }
 
 func (h MessagesHandler) getGatewayDeviceStatus(ctx context.Context, deviceKey string) (*gatewayDeviceStatusResponse, error) {

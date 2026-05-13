@@ -11,28 +11,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
   
   const token = localStorage.getItem("wa_token");
   if (!token) {
+    console.log("[Auth] No token found, redirecting to login");
     return navigateTo("/login");
   }
 
-  // Validate token by making a test request
-  try {
-    const config = useRuntimeConfig();
-    const headers: HeadersInit = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
-    
-    const response = await $fetch(`${config.public.apiBase}/api/v1/devices`, {
-      method: "GET",
-      headers,
-      retry: 0,
-    });
-    
-    // Token is valid, continue
-    return;
-  } catch (error: any) {
-    // If 401 or any error, token is invalid
-    localStorage.removeItem("wa_token");
-    return navigateTo("/login");
-  }
+  // Do not block route navigation with network calls.
+  // Token validity is enforced by API responses in useApi().
+  return;
 });
